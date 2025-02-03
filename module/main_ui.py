@@ -15,8 +15,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QLabel, QLineEdit, QMainWindow,
-    QMenuBar, QSizePolicy, QStatusBar, QWidget)
+from PySide6.QtWidgets import (QApplication, QLineEdit, QMainWindow, QMenuBar,
+    QSizePolicy, QStatusBar, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -65,64 +65,6 @@ class Ui_MainWindow(object):
         self.inputContrasenia.setObjectName(u"inputContrasenia")
         self.inputContrasenia.setGeometry(QRect(40, 320, 271, 31))
         self.inputContrasenia.setStyleSheet(u"")
-        self.labelNumeroTelefono = QLabel(self.centralwidget)
-        self.labelNumeroTelefono.setObjectName(u"labelNumeroTelefono")
-        self.labelNumeroTelefono.setGeometry(QRect(50, 90, 261, 16))
-        font = QFont()
-        font.setFamilies([u"Segoe UI"])
-        self.labelNumeroTelefono.setFont(font)
-        self.labelNumeroTelefono.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
-        self.labelEmail = QLabel(self.centralwidget)
-        self.labelEmail.setObjectName(u"labelEmail")
-        self.labelEmail.setGeometry(QRect(360, 90, 261, 16))
-        self.labelEmail.setFont(font)
-        self.labelEmail.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
-        self.labelCURP = QLabel(self.centralwidget)
-        self.labelCURP.setObjectName(u"labelCURP")
-        self.labelCURP.setGeometry(QRect(50, 180, 261, 16))
-        self.labelCURP.setFont(font)
-        self.labelCURP.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
-        self.labelRFC = QLabel(self.centralwidget)
-        self.labelRFC.setObjectName(u"labelRFC")
-        self.labelRFC.setGeometry(QRect(360, 180, 261, 16))
-        self.labelRFC.setFont(font)
-        self.labelRFC.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
-        self.labelIPv4 = QLabel(self.centralwidget)
-        self.labelIPv4.setObjectName(u"labelIPv4")
-        self.labelIPv4.setGeometry(QRect(50, 270, 261, 16))
-        self.labelIPv4.setFont(font)
-        self.labelIPv4.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
-        self.labelFechaNacimiento = QLabel(self.centralwidget)
-        self.labelFechaNacimiento.setObjectName(u"labelFechaNacimiento")
-        self.labelFechaNacimiento.setGeometry(QRect(360, 270, 261, 16))
-        self.labelFechaNacimiento.setFont(font)
-        self.labelFechaNacimiento.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
-        self.labelContrasenia = QLabel(self.centralwidget)
-        self.labelContrasenia.setObjectName(u"labelContrasenia")
-        self.labelContrasenia.setGeometry(QRect(50, 360, 261, 16))
-        self.labelContrasenia.setFont(font)
-        self.labelContrasenia.setStyleSheet(u"color: gray; \n"
-"font-size: 12px; \n"
-"width: 200px; \n"
-"height: 40px;")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -146,12 +88,5 @@ class Ui_MainWindow(object):
         self.inputIPv4.setPlaceholderText(QCoreApplication.translate("MainWindow", u"IPv4", None))
         self.inputFechaNacimiento.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Fecha de Nacimiento", None))
         self.inputContrasenia.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Contrase\u00f1a", None))
-        self.labelNumeroTelefono.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
-        self.labelEmail.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
-        self.labelCURP.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
-        self.labelRFC.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
-        self.labelIPv4.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
-        self.labelFechaNacimiento.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
-        self.labelContrasenia.setText(QCoreApplication.translate("MainWindow", u"Ingrese la informaci\u00f3n solicitada.", None))
     # retranslateUi
 

@@ -10,78 +10,88 @@ class MainWindow(QMainWindow):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.formFields = FormFields()
 
-        self.labels = {}
-        self.animations = {}
-        self.messagesAlert = {}
-
-        self.setupFloatingLabels()
-
+        self.setupLabels()
         self.show()
 
-    def setupFloatingLabels(self):
-        for widget in self.findChildren(QLineEdit):
-            placeholder = widget.placeholderText() or "Ingrese texto"
-            widget.setPlaceholderText("")
-            label = QLabel(placeholder, self)
-            label.setStyleSheet("color: gray; font-size: 12px; width: 200px; height: 40px;")
-            label.move(widget.x() + 5, widget.y() - 1)
-            label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+    def setupLabels(self):
+        for input in self.findChildren(QLineEdit):
+            placeholder = input.placeholderText() or "Ingrese texto"
+            input.setPlaceholderText("")
+            
+            # Create floating label
+            floatingLabel = QLabel(placeholder, self)
+            floatingLabel.setStyleSheet("color: gray; font-size: 12px; width: 200px; height: 40px;")
+            floatingLabel.move(input.x() + 5, input.y() - 1)
+            floatingLabel.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
-            self.labels[widget] = label
-            self.animations[widget] = QPropertyAnimation(label, b"pos")
-            self.animations[widget].setDuration(40)
+            #Create message label
+            messageLabel = QLabel("Ingrese la información solicitada", self)
+            messageLabel.setStyleSheet("color: gray; font-size: 10px; width: 200px; height: 40px;")
+            messageLabel.move(input.x() + 5, input.y() + 30)
 
-            widget.focusInEvent = lambda event, w=widget: self.onFocusIn(event, w)
-            widget.focusOutEvent = lambda event, w=widget: self.onFocusOut(event, w)
+            #Create animation
+            floatingLabelAnimation = QPropertyAnimation(floatingLabel, b"pos")
+            floatingLabelAnimation.setDuration(40)
 
-    def onFocusIn(self, event, widget: QLineEdit):
-        self.animateLabel(widget, widget.x() + 5, widget.y() - 20)
-        QLineEdit.focusInEvent(widget, event)
+            # Store labels and animations
+            field = Field(input, floatingLabel, messageLabel, floatingLabelAnimation)
+            self.formFields.addField(field)
 
-    def onFocusOut(self, event, widget: QLineEdit):
-        if not widget.text():
-            self.animateLabel(widget, widget.x() + 5, widget.y() - 1)
+            input.focusInEvent = lambda event, w=field: self.onFocusIn(event, w)
+            input.focusOutEvent = lambda event, w=field: self.onFocusOut(event, w)
+
+    def onFocusIn(self, event, field: Field):
+        input = field.input
+
+        self.animateLabel(field.animationLabel, field.labelInfo, input.x() + 5, input.y() - 20)
+        QLineEdit.focusInEvent(input, event)
+
+    def onFocusOut(self, event, field: Field):
+        input = field.input
+        animation = field.animationLabel
+        labelInfo = field.labelInfo
+        labelMessage = field.labelMessage
+
+        if not input.text():
+            self.changeColorLabel(labelMessage, "gray")
+            self.changeTextLabel(labelMessage, "Ingrese la información solicitada")
+            self.animateLabel(animation, labelInfo, input.x() + 5, input.y() - 1)
 
         else:
-            if widget.objectName() == "inputIPv4":
-                self.validateIPv4(widget.text(), widget)
+            if input.objectName() == "inputIPv4":
+                self.validateIPv4(input.text(), labelMessage)
 
-        QLineEdit.focusOutEvent(widget, event)
+        QLineEdit.focusOutEvent(input, event)
 
-    def animateLabel(self, widget: QLineEdit, x, y):
-        label = self.labels.get(widget)
-        if label:
-            animation = self.animations.get(widget)
-            animation.setStartValue(label.pos())
-            animation.setEndValue(QPoint(x, y))
-            animation.start()    
+    def animateLabel(self, animation: QPropertyAnimation, labelInfo: QLabel, x, y):
+        animation.setStartValue(labelInfo.pos())
+        animation.setEndValue(QPoint(x, y))
+        animation.start()    
 
-    def changeColorLabel(self, widget: QLineEdit, color: str):
-        label = self.labels.get(widget)
-        if label:
-            label.setStyleSheet(f"color: {color}; font-size: 12px; width: 200px; height: 40px;")
+    def changeColorLabel(self, label: QLabel, color: str):
+        label.setStyleSheet(f"color: {color}; font-size: 10px; width: 200px; height: 40px;")
 
-    def changeTextLabel(self, widget: QLineEdit, text: str):
-        label = self.labels.get(widget)
-        if label:
-            label.setText(text)        
+    def changeTextLabel(self, label: QLabel, text: str):
+        label.setText(text)        
 
     def mousePressEvent(self, event):
-        for widget in self.labels.keys():
-            widget.clearFocus()
+        for input in self.formFields.getInputs():
+            input.clearFocus()
+
         super().mousePressEvent(event)
 
 
     # Metodos para validar campos
 
-    def validateIPv4(self, ip: str, widget: QLineEdit):
+    def validateIPv4(self, ip: str, messageLabel: QLabel):
         if re.search("^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|25[0-5]|2[0-4]\d|[01]?\d\d?)$", ip):
-            self.changeColorLabel(widget, "green")
-            self.changeTextLabel(widget, "Dirección IP válida")
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "Dirección IP válida")
         else:
-            self.changeColorLabel(widget, "red")
-            self.changeTextLabel(widget, "Dirección IP NO valida")
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "Dirección IP NO valida")
 
 
 
