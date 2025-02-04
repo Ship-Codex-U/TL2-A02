@@ -24,11 +24,13 @@ class MainWindow(QMainWindow):
             floatingLabel = QLabel(placeholder, self)
             floatingLabel.setStyleSheet("color: gray; font-size: 12px; width: 200px; height: 40px;")
             floatingLabel.move(input.x() + 5, input.y() - 1)
+            floatingLabel.setFixedWidth(200)
             floatingLabel.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
 
             #Create message label
             messageLabel = QLabel("Ingrese la información solicitada", self)
             messageLabel.setStyleSheet("color: gray; font-size: 10px; width: 200px; height: 40px;")
+            messageLabel.setFixedWidth(200)
             messageLabel.move(input.x() + 5, input.y() + 30)
 
             #Create animation
@@ -60,8 +62,26 @@ class MainWindow(QMainWindow):
             self.animateLabel(animation, labelInfo, input.x() + 5, input.y() - 1)
 
         else:
+            if input.objectName() == "inputContrasenia":
+                self.validatePassword(input.text(), labelMessage)
+
+            if input.objectName() == "inputFechaNacimiento":
+                self.validateBirthday(input.text(), labelMessage)
+            
+            if input.objectName() == "inputRFC":
+                self.validateRFC(input.text(), labelMessage)
+
+            if input.objectName() == "inputCURP":
+                self.validateCURP(input.text(), labelMessage)
+            
+            if input.objectName() == "inputTelefono":
+                self.validatePhoneNumber(input.text(), labelMessage)
+
             if input.objectName() == "inputIPv4":
                 self.validateIPv4(input.text(), labelMessage)
+
+            elif input.objectName() == "inputEmail":
+                self.validateEmail(input.text(), labelMessage)
 
         QLineEdit.focusOutEvent(input, event)
 
@@ -93,6 +113,53 @@ class MainWindow(QMainWindow):
             self.changeColorLabel(messageLabel, "red")
             self.changeTextLabel(messageLabel, "Dirección IP NO valida")
 
+    def validateEmail(self, email: str, messageLabel: QLabel):
+        if re.search("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "Correo electrónico válido")
+        else:
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "Correo electrónico NO válido")
+    
+    def validatePassword(self, password: str, messageLabel: QLabel):
+        if re.search("^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", password):
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "Contraseña válida")
+        else:
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "Contraseña NO válida")
+
+    def validateBirthday(self, birthday: str, messageLabel: QLabel):
+        if re.search("^(0[1-9]|1[0-9]|2[0-9]|3[0-1])/(0[1-9]|1[0-2])/[0-9]{4}$", birthday):
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "Fecha de nacimiento válida")
+        else:
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "Fecha de nacimiento NO válida")
+    
+    def validateRFC(self, rfc: str, messageLabel: QLabel):
+        if re.search("^[A-Z]{4}[0-9]{6}[A-Z0-9]{3}$", rfc):
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "RFC válido")
+        else:
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "RFC NO válido")
+    
+    def validateCURP(self, curp: str, messageLabel: QLabel):
+        if re.search("^[A-Z]{4}[0-9]{6}[HM]{1}[A-Z]{2}[A-Z]{3}[A-Z0-9]{2}$", curp):
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "CURP válida")
+        else:
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "CURP NO válida")
+        
+    def validatePhoneNumber(self, phone: str, messageLabel: QLabel):
+        if re.search("^[0-9]{10}$", phone):
+            self.changeColorLabel(messageLabel, "green")
+            self.changeTextLabel(messageLabel, "Número de teléfono válido")
+        else:
+            self.changeColorLabel(messageLabel, "red")
+            self.changeTextLabel(messageLabel, "Número de teléfono NO válido")
 
 
 if __name__ == "__main__":
